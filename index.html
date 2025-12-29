@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Happy New Year ~ Juhi</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0d16;
+  --ink:#eaeaf6;
+  --muted:#a8b0d8;
+  --gold:#f4d28e;
+  --accent:#64ffda;
+  --violet:#8b5cf6;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:radial-gradient(1200px 800px at 70% -20%,rgba(100,255,218,.05),transparent 55%),linear-gradient(180deg,#0b0d16,#0a0c14);
+  color:var(--ink);
+  font-family:Poppins,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+.letterbox::before,.letterbox::after{content:"";position:fixed;left:0;right:0;height:9vh;background:#000;z-index:15;pointer-events:none}
+.letterbox::before{top:0}.letterbox::after{bottom:0}
+
+.app{position:relative;height:100%;display:grid;place-items:center;overflow:hidden}
+.scene{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:18vh 16px 16vh;text-align:center;
+  opacity:0;transform:translateX(24px);
+  transition:opacity .9s ease,transform .9s ease;
+}
+.scene.active{opacity:1;transform:translateX(0)}
+h1,h2{margin:.2em 0}
+h1{font-family:"Playfair Display",serif;font-size:clamp(28px,7vw,44px);letter-spacing:.5px}
+h1 em { color: var(--gold); font-style: italic; padding-right: 0.1em; }
+h2{font-size:clamp(18px,4.5vw,22px);color:var(--muted);font-weight:400}
+.kicker{color:var(--gold);letter-spacing:.12em;text-transform:uppercase;font-size:.85rem;margin-bottom:8px;opacity:0.8}
+.type{font-size:clamp(18px,4.8vw,24px);line-height:1.7em;max-width:760px;margin-top:12px;min-height:6.5em;font-weight:300}
+.type .cursor{display:inline-block;width:.65ch;background:var(--ink);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{background:transparent}}
+
+.actions{position:fixed;bottom:12vh;left:0;right:0;display:flex;gap:10px;justify-content:center;z-index:12;flex-wrap:wrap}
+button{
+  appearance:none;border:none;border-radius:999px;padding:12px 18px;font-weight:700;
+  background:rgba(255,255,255,.05);color:var(--ink);backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:all .2s ease;
+  font-family: inherit;
+}
+button.primary{background:linear-gradient(135deg,var(--gold),#ffd991);color:#141414;box-shadow: 0 4px 12px rgba(244, 210, 142, 0.2);}
+button.primary:hover{transform:translateY(-2px);box-shadow: 0 6px 16px rgba(244, 210, 142, 0.3);}
+button:active{transform:translateY(1px)}
+.mini{font-size:.8rem;color:var(--muted);margin-top:1rem;}
+
+.progress{position:fixed;top:12vh;left:0;right:0;display:flex;justify-content:center;gap:8px;z-index:12}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.24);transition: background .3s}
+.dot.on{background:var(--gold);box-shadow: 0 0 8px var(--gold);}
+
+#stars,#snow,#fireworks{position:fixed;inset:0;pointer-events:none;z-index:0}
+.glow{position:fixed;inset:auto auto 20% 50%;width:46vmax;height:46vmax;transform:translateX(-50%);filter:blur(60px);opacity:.4;background:radial-gradient(circle at 50% 50%,rgba(100,255,218,.25),transparent 60%)}
+
+.title{font-size:clamp(30px,8vw,56px)}
+.big{font-size:clamp(40px,10vw,72px);font-weight:800;letter-spacing:1px; background: -webkit-linear-gradient(top, #fff, #a8b0d8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;}
+.toast{position:fixed;bottom:6vh;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.55);
+  padding:8px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.15);color:var(--ink);font-size:.9rem;opacity:0;transition:opacity .3s;z-index:18}
+.toast.show{opacity:1}
+
+.custom-cursor {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%, -50%);
+  transition: width .25s ease, height .25s ease, background-color .25s ease;
+  mix-blend-mode: exclusion;
+  box-shadow: 0 0 10px rgba(244, 210, 142, 0.3);
+}
+.custom-cursor.hover {
+  width: 48px;
+  height: 48px;
+  background-color: rgba(244, 210, 142, 0.15);
+  border-color: rgba(244, 210, 142, 0.5);
+  box-shadow: 0 0 20px rgba(244, 210, 142, 0.5);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body, button { cursor: none; }
+  .custom-cursor { display: block; }
+}
+</style>
+</head>
+<body class="letterbox">
+<div class="custom-cursor" id="cursor"></div>
+
+<audio id="bgm" loop preload="auto">
+  <source src="Luk_Chup_Na_Jao_Ji_Chaudhary.mp3" type="audio/mp3">
+</audio>
+
+<canvas id="stars"></canvas>
+<canvas id="snow"></canvas>
+<canvas id="fireworks"></canvas>
+<div class="glow"></div>
+
+<div class="app" id="app">
+  <section class="scene active">
+    <div class="kicker">The Year Ends</div>
+    <h1 class="title">Hey <span style="color:var(--gold)">Juhi</span></h1>
+    <div class="type" id="t0"></div>
+  </section>
+
+  <section class="scene">
+    <div class="kicker">Reflection</div>
+    <h1>The Little <em>Things</em></h1>
+    <div class="type" id="t1"></div>
+  </section>
+
+  <section class="scene">
+    <div class="kicker">Truth is...</div>
+    <h1>You have a <em>Vibe</em></h1>
+    <div class="type" id="t2"></div>
+  </section>
+
+  <section class="scene">
+    <div class="kicker">Celebration</div>
+    <h1 class="big">Welcome 2026</h1>
+    <div class="type" id="t3"></div>
+    <div class="mini" id="count"></div>
+  </section>
+
+  <section class="scene">
+    <div class="kicker">Wishes</div>
+    <h1>Just For <em>You</em></h1>
+    <div class="type" id="t4"></div>
+  </section>
+
+  <section class="scene">
+    <div class="kicker">The Future</div>
+    <h1>New <em>Stories</em></h1>
+    <div class="type" id="t5"></div>
+  </section>
+
+  <section class="scene">
+    <div class="kicker">A Promise</div>
+    <h1>Always <em>Here</em></h1>
+    <div class="type" id="t6"></div>
+  </section>
+
+  <section class="scene">
+    <div class="kicker">Sincerely</div>
+    <h1 class="title">Thank You</h1>
+    <div class="type" id="t7"></div>
+    <div class="mini" style="margin-top:10px; font-size: 1.2rem; opacity: 0.8;">✨</div>
+  </section>
+</div>
+
+<div class="progress" id="progress"></div>
+<div class="actions">
+  <button id="back">Back</button>
+  <button id="speed">Speed: Slow</button>
+  <button id="music">♫ Music</button>
+  <button id="next" class="primary">Next</button>
+</div>
+<div class="toast" id="toast">Swipe left/right to navigate</div>
+
+<script>
+const NAME="Juhi"; 
+
+const SPEEDS={normal:32,slow:52},$=q=>document.querySelector(q),$$=q=>[...document.querySelectorAll(q)];
+
+let speed=SPEEDS.slow,punct=6,scene=0,typed=new Set(),scenes=$$(".scene"),total=scenes.length;
+
+const cursor = $("#cursor");
+document.addEventListener('mousemove', e => {
+  requestAnimationFrame(() => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+});
+
+$$("button").forEach(b => {
+  b.addEventListener("mouseenter", () => cursor.classList.add("hover"));
+  b.addEventListener("mouseleave", () => cursor.classList.remove("hover"));
+});
+
+const lines=[
+  [`Another year goes by.`,
+  `Times change, people change.`,
+  `But some people just leave a lasting impression.`,
+  `I wanted to send this little note just for you.`],
+
+  [`I don't say it often enough,`,
+  `but you have this incredible energy about you.`,
+  `It’s in the way you speak,`,
+  `and the way you make everyone around you feel at ease.`],
+
+  [`Your smile is genuinely contagious.`,
+  `It has a way of brightening up even the dullest days.`,
+  `I just wanted to thank you,`,
+  `for simply being the amazing person you are.`],
+
+  [`As the clock ticks towards a fresh start...`,
+  `I hope the universe brings you back`,
+  `all the kindness you give to the world.`,
+  `The world starts its celebration.`],
+
+  [`May this new year be kind to you.`,
+  `Full of laughter, good music, and zero stress.`,
+  `And may you find a million reasons to smile.`,
+  `(Because honestly, it really suits you.)`],
+
+  [`Here's to new adventures.`,
+  `To spontaneous plans and quiet moments.`,
+  `And hopefully, to our paths crossing a lot more.`],
+
+  [`I also wanted to make you a promise.`,
+  `No matter what the situation is,`,
+  `or how busy things get,`,
+  `I promise I will always be there for you. (Till the last light of the universe)`,
+  `I just want to see you smile, see you happy.`,
+  `I want to see you achieve your goals.`,
+  `I pray that all your bad days of 2026 will be replaced by my good days.`,
+  `You deserve all the beautiful things in the world.`],
+
+  [`Wishing you a magical 2026.`,
+  `Stay as wonderful as you are, Juhi.`,
+  `Happy New Year & 359 Days left for your magical moment`,
+  `— Sankho.`]
+];
+
+const progress=$("#progress");
+for(let i=0;i<total;i++){const d=document.createElement('div');d.className='dot'+(i===0?' on':'');progress.appendChild(d);}
+function setScene(n){
+  scene=Math.max(0,Math.min(total-1,n));
+  scenes.forEach((s,i)=>s.classList.toggle('active',i===scene));
+  $$(".dot").forEach((d,i)=>d.classList.toggle('on',i===scene));
+  $("#back").disabled=scene===0;
+  $("#next").style.display=scene===total-1?'none':'inline-block';
+  if(scene===3||scene===7)startFW();else stopFW();
+  typeRun(scene);
+}
+$("#next").onclick=()=>scene<total-1&&setScene(scene+1);
+$("#back").onclick=()=>setScene(scene-1);
+$("#speed").onclick=()=>{
+  if(speed===SPEEDS.slow){speed=SPEEDS.normal;punct=4;$("#speed").textContent="Speed: Normal";}
+  else{speed=SPEEDS.slow;punct=6;$("#speed").textContent="Speed: Slow";}
+};
+let touchX=null;
+addEventListener('touchstart',e=>touchX=e.touches[0].clientX,{passive:true});
+addEventListener('touchmove',e=>{
+  if(touchX==null)return;
+  const dx=e.touches[0].clientX-touchX;
+  if(Math.abs(dx)>70){
+    const dir=dx<0?1:-1;
+    if(!(scene===total-1&&dir>0))setScene(scene+dir);
+    touchX=null;
+  }
+},{passive:true});
+setTimeout(()=>$("#toast").classList.add('show'),500);
+setTimeout(()=>$("#toast").classList.remove('show'),3000);
+
+function wait(ms){return new Promise(r=>setTimeout(r,ms));}
+function pause(ch){if(/[.?!]/.test(ch))return speed*punct*1.2;if(/[,:;—-]/.test(ch))return speed*punct*0.8;return speed;}
+async function typewriter(el,t){el.innerHTML='';const s=document.createElement('span');el.appendChild(s);const c=document.createElement('span');c.className='cursor';el.appendChild(c);
+for(let i=1;i<=t.length;i++){s.textContent=t.slice(0,i);await wait(pause(t[i-1]||' '));}c.remove();}
+async function typeRun(i){if(typed.has(i))return;typed.add(i);const el=$("#t"+i);for(const ln of lines[i]){await typewriter(el,ln);await wait(speed*14);}}
+
+const count=$("#count");
+function updCount(){const target=new Date("2026-01-01T00:00:00"),d=target-new Date();if(d<=0){count.textContent="🎆 Happy New Year!";return;}
+const D=Math.floor(d/86400000),H=Math.floor(d%86400000/3600000),M=Math.floor(d%3600000/60000),S=Math.floor(d%60000/1000);
+count.textContent=`⏳ ${D}d : ${H}h : ${M}m : ${S}s`;}
+setInterval(updCount,1000);updCount();
+
+const st=$("#stars").getContext("2d");
+$("#stars").width=innerWidth;$("#stars").height=innerHeight;
+let starA=Array.from({length:160},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.2+0.3,s:Math.random()*0.3+0.05}));
+function drawS(){st.clearRect(0,0,innerWidth,innerHeight);
+for(const s of starA){st.beginPath();st.arc(s.x,s.y,s.r,0,6.28);st.fillStyle=`hsla(${220+Math.random()*40},100%,${70+Math.random()*20}%,.9)`;st.fill();s.y+=s.s;if(s.y>innerHeight)s.y=-2;}
+requestAnimationFrame(drawS);}drawS();
+
+const pt=$("#snow").getContext("2d");
+$("#snow").width=innerWidth;$("#snow").height=innerHeight;
+let flakes=Array.from({length:35},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*.5,vy:.4+Math.random()*.6,r:2+Math.random()*3,o:Math.random()*0.5+0.3}));
+function drawP(){pt.clearRect(0,0,innerWidth,innerHeight);
+for(const f of flakes){
+  pt.fillStyle=`rgba(244, 210, 142, ${f.o})`;
+  pt.beginPath();pt.arc(f.x,f.y,f.r,0,6.28);pt.fill();
+  f.x+=f.vx;f.y+=f.vy;if(f.y>innerHeight){f.y=-5;f.x=Math.random()*innerWidth;}
+}
+requestAnimationFrame(drawP);}drawP();
+
+const fw=$("#fireworks").getContext("2d");$("#fireworks").width=innerWidth;$("#fireworks").height=innerHeight;
+let sparks=[],fwLoopId=null,fwTimer=null;
+function launch(x,y,h){for(let i=0;i<220;i++){const a=Math.random()*6.28,sp=1.5+Math.random()*4;const hue=h+Math.random()*40-20;
+sparks.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:110+Math.random()*40,h:hue,glow:Math.random()*.4+.6});}}
+function loopFW(){fw.fillStyle="rgba(0,0,0,0.2)";fw.fillRect(0,0,innerWidth,innerHeight);
+for(let i=sparks.length-1;i>=0;i--){const p=sparks[i];p.x+=p.vx;p.y+=p.vy;p.vy+=.03;p.life--;
+fw.beginPath();fw.arc(p.x,p.y,2,0,6.28);fw.fillStyle=`hsla(${p.h},100%,60%,${p.life/120})`;fw.fill();
+if(p.life<=0)sparks.splice(i,1);}fwLoopId=requestAnimationFrame(loopFW);}
+function startFW(){if(fwLoopId)return;loopFW();
+const boom=()=>{const b=3+Math.floor(Math.random()*3);for(let i=0;i<b;i++)setTimeout(()=>launch(Math.random()*innerWidth*0.9+innerWidth*0.05,Math.random()*innerHeight*0.5+innerHeight*0.1,Math.random()*360),i*200);};
+for(let i=0;i<12;i++)setTimeout(boom,i*250);fwTimer=setInterval(boom,700);}
+function stopFW(){if(fwLoopId){cancelAnimationFrame(fwLoopId);fwLoopId=null;clearInterval(fwTimer);fwTimer=null;sparks=[];fw.clearRect(0,0,innerWidth,innerHeight);}}
+
+const audio = $("#bgm");
+const musicBtn = $("#music");
+let isPlaying = false;
+
+function toggleMusic() {
+  if (isPlaying) {
+    audio.pause();
+    musicBtn.textContent = "♫ Music";
+    isPlaying = false;
+  } else {
+    audio.play().then(() => {
+      musicBtn.textContent = "⏸ Music";
+      isPlaying = true;
+    }).catch(e => console.log("Play failed", e));
+  }
+}
+
+musicBtn.onclick = toggleMusic;
+
+window.addEventListener('load', () => {
+  audio.play().then(() => {
+    isPlaying = true;
+    musicBtn.textContent = "⏸ Music";
+  }).catch(() => {
+    const unlock = () => {
+      audio.play().then(() => {
+        isPlaying = true;
+        musicBtn.textContent = "⏸ Music";
+      });
+      document.removeEventListener('click', unlock);
+      document.removeEventListener('touchstart', unlock);
+    };
+    document.addEventListener('click', unlock);
+    document.addEventListener('touchstart', unlock);
+  });
+});
+
+typeRun(0);
+</script>
+</body>
+</html>
